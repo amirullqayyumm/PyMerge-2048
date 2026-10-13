@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131d">
+  <meta name="description" content="PyMerge — a stylish 2048 puzzle game powered by Python in your browser. Slide, merge, and reach 2048.">
+  <title>PyMerge — Play 2048 in Python</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/brython@3.14.3/brython.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/brython@3.14.3/brython_stdlib.js"></script>
+  <script type="text/python" src="app.py"></script>
+</head>
+<body onload="brython()">
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="PyMerge home">
+        <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
+        <span>py<span class="brand-highlight">merge</span><span class="brand-period">.</span></span>
+      </a>
+      <div class="top-nav">
+        <span class="built-with"><span class="python-glyph">{py}</span> Made with Python</span>
+        <a class="nav-link" href="#how-to-play">How to play <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE MERGE LAB <span class="eyebrow-index">/ 001</span></div>
+        <h1>A little logic.<br><span>A lot of fun<span class="title-dot">.</span></span></h1>
+        <p>Slide the tiles. Match the numbers. Chase <strong>2048.</strong> A beautifully simple puzzle game built with real Python, right in your browser.</p>
+      </section>
+
+      <div class="game-layout">
+        <section class="game-main" aria-label="2048 puzzle game">
+          <div class="game-topline">
+            <div class="game-head">
+              <div class="live-indicator"><span id="state-led" class="status-dot"></span><span id="state-text">Ready to play</span></div>
+              <h2>Make your next move<span>.</span></h2>
+            </div>
+            <div class="game-actions">
+              <button type="button" class="btn btn-quiet" id="undo-btn" aria-label="Undo last move" disabled><span class="action-icon">↶</span> Undo</button>
+              <button type="button" class="btn btn-primary" id="new-btn"><span class="action-icon">↻</span> New game</button>
+            </div>
+          </div>
+
+          <div class="score-grid" aria-label="Game statistics">
+            <div class="score-box"><span class="stat-label">YOUR SCORE</span><strong id="score">0</strong><span class="stat-foot">Keep merging ↗</span></div>
+            <div class="score-box"><span class="stat-label">PERSONAL BEST</span><strong id="best">0</strong><span class="stat-foot">A new record awaits</span></div>
+            <div class="score-box"><span class="stat-label">TOTAL MOVES</span><strong id="moves">0</strong><span class="stat-foot">Every move counts</span></div>
+          </div>
+
+          <div class="board-shell">
+            <div class="board-top"><span><span class="board-star">✳</span> GAME BOARD</span><span>4 × 4 GRID</span></div>
+            <div class="board-container">
+              <div id="board" class="board" role="grid" tabindex="0" aria-label="2048 game board. Use arrow keys or W A S D to slide tiles."></div>
+              <div class="board-loading" id="loading" role="status">Loading Python game engine…<br><small>First visit may take a few seconds.</small></div>
+            </div>
+            <div class="board-footer"><span><span class="keycaps"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></span> to slide</span><span class="touch-caption">or swipe on mobile ↗</span></div>
+          </div>
+          <div class="mobile-controls" aria-label="Touch direction controls">
+            <div></div><button type="button" id="direction-up" aria-label="Move up">↑</button><div></div>
+            <button type="button" id="direction-left" aria-label="Move left">←</button>
+            <button type="button" id="direction-down" aria-label="Move down">↓</button>
+            <button type="button" id="direction-right" aria-label="Move right">→</button>
+          </div>
+        </section>
+
+        <aside class="sidebar" aria-label="Game details and instructions">
+          <section class="side-card challenge-card">
+            <div class="side-card-top"><span class="side-eyebrow">THE CHALLENGE</span><span class="arrow-decor">↗</span></div>
+            <div class="big-2048">2048<span>✦</span></div>
+            <p>One number. Infinite possibilities. Think ahead and keep your biggest tiles together.</p>
+            <div class="challenge-progress"><div class="progress-heading"><span>Progress to 2048</span><span id="progress-text">0%</span></div><div class="progress-track"><span id="progress-fill"></span></div></div>
+            <div class="highest-tile">HIGHEST TILE <strong id="peak-tile">2</strong></div>
+          </section>
+
+          <section class="side-card milestone-card">
+            <div class="side-card-top"><span class="side-eyebrow">MILESTONES</span><span class="small-star">✳</span></div>
+            <h3>Level up.</h3>
+            <div class="milestone-list">
+              <div class="milestone" id="milestone-128"><span class="milestone-icon">◇</span><span>Find your rhythm</span><strong>128</strong></div>
+              <div class="milestone" id="milestone-256"><span class="milestone-icon">◇</span><span>Getting warmer</span><strong>256</strong></div>
+              <div class="milestone" id="milestone-512"><span class="milestone-icon">◇</span><span>Halfway there</span><strong>512</strong></div>
+              <div class="milestone" id="milestone-1024"><span class="milestone-icon">◇</span><span>Almost legendary</span><strong>1024</strong></div>
+              <div class="milestone" id="milestone-2048"><span class="milestone-icon">◇</span><span>Legend status</span><strong>2048</strong></div>
+            </div>
+          </section>
+
+          <section class="tip-card" id="how-to-play">
+            <span class="tip-icon">⌘</span>
+            <div><h3>How to play</h3><p>Use your <strong>arrow keys</strong> or <strong>W A S D</strong> to slide tiles. Equal numbers combine into one. Get to 2048 to win. On mobile, swipe or use the on-screen arrows.</p></div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="footer"><span>PYMERGE / A PYTHON POWERED PUZZLE</span><span>Crafted with code, caffeine & curiosity <span class="footer-spark">✳</span></span></footer>
+  </div>
+
+  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-card"><div class="modal-sparkle">✦</div><span class="modal-eyebrow">PYMERGE / GAME STATUS</span><h2 id="modal-title">You did it!</h2><p id="modal-desc">2048 achieved.</p><div class="modal-actions"><button type="button" id="continue-btn" class="btn btn-quiet">Keep playing</button><button type="button" id="reset-modal-btn" class="btn btn-primary">Play again ↗</button></div></div>
+  </div>
+</body>
+</html>
